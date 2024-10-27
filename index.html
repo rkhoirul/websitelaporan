@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Data Laporan Kejaksaan</title>
+    <link rel="icon" href="img/Kejaksaan_Agung_Republik_Indonesia_new_logo-removebg-preview.png" type="image/x-icon" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <link rel="stylesheet" href="css/mdb.min.css" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            margin-top: 50px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        h3 {
+            color: #34C759;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .data-item {
+            background: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 5px solid #34C759;
+        }
+        .data-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .data-item strong {
+            display: block;
+            color: #333;
+            font-size: 1.2em;
+        }
+        .tracking-status {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .tracking-status img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+        .tracking-status .status-labels {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+        }
+        .tracking-status .status-labels p {
+            color: #333;
+            margin: 0 10px;
+            flex: 1;
+            text-align: center;
+            border-radius: 5px;
+            padding: 10px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        @media (max-width: 600px) {
+            .tracking-status .status-labels {
+                justify-content: space-around;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="container">
+            <h3 class="text-center mb-4">Informasi Laporan Anda</h3>
+            <p>No Pengaduan : 123456789</p>
+            <div id="data-list"></div>
+            <div class="tracking-status">
+                <img src="img/Group 12041.png" alt="Tracking" />
+                <div class="status-labels">
+                    <p class="left">Laporan Masuk</p>
+                    <p class="center">Laporan Diproses</p>
+                    <p class="right">Laporan Selesai Diproses</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script type="text/javascript" src="js/easyData-google-sheets.js"></script>
+
+    <script>
+        const API_KEY = "AIzaSyAErnUMk470-_jn9JFNcbqvOtRsuRZK8nQ";
+
+        function displayResult2(response) {
+            const dataList = document.getElementById("data-list");
+            dataList.innerHTML = "";
+            const rows = response.result.values;
+
+            if (rows.length > 0) {
+                const headers = rows[0];
+                const lastRow = rows.slice(-1)[0];
+
+                lastRow.slice(1, -2).forEach((val, index) => {
+                    const dataItem = document.createElement("div");
+                    dataItem.className = "data-item";
+                    dataItem.innerHTML = `<strong>${headers[index + 1]}</strong><br>${val}`;
+                    dataList.appendChild(dataItem);
+                });
+            }
+        }
+
+        function loadData() {
+            const spreadsheetId = "1O_4AodLpSzBEjRGoA82_pCWrJTFkBFzO1oXW2eAA_0U";
+            const range = "A:Z";
+            getPublicValues({ spreadsheetId, range }, displayResult2);
+        }
+
+        window.addEventListener("load", (e) => {
+            initOAuthClient({ apiKey: API_KEY });
+        });
+
+        document.addEventListener("gapi-loaded", (e) => {
+            loadData();
+        });
+    </script>
+</body>
+</html>
