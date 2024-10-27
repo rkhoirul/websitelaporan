@@ -113,14 +113,19 @@
                 const headers = rows[0];
                 const lastRow = rows.slice(-1)[0];
 
-                lastRow.slice(1, -2).forEach((val, index) => {
+                // Ambil data dari kolom 1 sampai kolom sebelum 3 kolom terakhir dan tidak termasuk kolom ke-5
+                const filteredData = lastRow.filter((_, index) => index !== 0 && index !== 5).slice(0, -3);
+                const filteredHeaders = headers.filter((_, index) => index !== 0 && index !== 5).slice(0, -3);
+
+                filteredData.forEach((val, index) => {
                     const dataItem = document.createElement("div");
                     dataItem.className = "data-item";
-                    dataItem.innerHTML = `<strong>${headers[index + 1]}</strong><br>${val}`;
+                    dataItem.innerHTML = <strong>${filteredHeaders[index]}</strong><br>${val};
                     dataList.appendChild(dataItem);
                 });
             }
         }
+
 
         function loadData() {
             const spreadsheetId = "1O_4AodLpSzBEjRGoA82_pCWrJTFkBFzO1oXW2eAA_0U";
